@@ -4,6 +4,8 @@ asyncio.set_event_loop(asyncio.new_event_loop())
 from pyrogram import Client, filters
 import yt_dlp
 import os
+from flask import Flask
+import threading
 
 # 🔑 CONFIG
 API_ID = 27459131
@@ -11,6 +13,17 @@ API_HASH = "836a42a092e122d47e1957423f613ec8"
 BOT_TOKEN = "8573490792:AAFlUC7zd0x3XuI91QQ4Rv1F2N1iVKf0wJc"
 
 app = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+
+# 🌐 WEB PARA RENDER
+web = Flask(__name__)
+
+@web.route('/')
+def home():
+    return "🔥 Bot activo"
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    web.run(host="0.0.0.0", port=port)
 
 # 🔥 START
 @app.on_message(filters.command("start"))
@@ -80,4 +93,9 @@ async def mp4(client, message):
 # 🚀 RUN
 if __name__ == "__main__":
     print("🔥 Bot encendido...")
+
+    # 🔥 inicia web en segundo plano
+    threading.Thread(target=run_web).start()
+
+    # 🤖 inicia bot
     app.run()
