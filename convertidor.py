@@ -43,7 +43,7 @@ async def mp3(client, message):
     await message.reply("⏳ Extrayendo audio...")
 
     file_id = str(uuid.uuid4())
-    
+
     try:
         ydl_opts = {
             'format': 'bestaudio/best',
@@ -101,8 +101,10 @@ async def mp4(client, message):
 if __name__ == "__main__":
     print("🔥 Bot encendido...")
 
-    # 🌐 servidor web en segundo plano
+    # 🌐 servidor web (Render keep alive)
     threading.Thread(target=run_web, daemon=True).start()
 
-    # 🤖 bot
-    app.run()
+    # 🤖 iniciar bot correctamente (FIX asyncio error)
+    app.start()
+    print("✅ Bot iniciado correctamente")
+    asyncio.get_event_loop().run_forever()
