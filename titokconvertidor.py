@@ -69,18 +69,21 @@ async def mp3(client, message):
     url = message.command[1]
     await message.reply("⏳ Extrayendo audio...")
 
+    import yt_dlp
+
+def descargar_mp3(url):
     ydl_opts = {
-        'format': 'bestaudio',
+        'format': 'bestaudio/best',
         'outtmpl': 'audio.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-        }]
+            'preferredquality': '192',
+        }],
     }
 
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
 
         for file in os.listdir():
             if file.endswith(".mp3"):
