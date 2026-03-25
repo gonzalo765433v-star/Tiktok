@@ -5,7 +5,7 @@ import os
 # 🔑 CONFIG
 API_ID = 27459131
 API_HASH = "836a42a092e122d47e1957423f613ec8"
-BOT_TOKEN = "8717238239:AAGMzMZ2U-7_dpOjOo6tio06Ka1Vs7J"
+BOT_TOKEN = "8717238239:AAHt8Sgm12h7wQGoPvGFQ07yBfOG3hjG3us"
 
 app = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
