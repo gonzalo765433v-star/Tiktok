@@ -1,11 +1,10 @@
 import asyncio
-asyncio.set_event_loop(asyncio.new_event_loop())
-
 from pyrogram import Client, filters
 import yt_dlp
 import os
 from flask import Flask
 import threading
+import uuid
 
 # 🔑 CONFIG
 API_ID = 27459131
@@ -43,21 +42,27 @@ async def mp3(client, message):
     url = message.command[1]
     await message.reply("⏳ Extrayendo audio...")
 
+    file_id = str(uuid.uuid4())
+    
     try:
         ydl_opts = {
             'format': 'bestaudio/best',
-            'outtmpl': 'audio.%(ext)s',
-            'quiet': True
+            'outtmpl': f'{file_id}.%(ext)s',
+            'quiet': True,
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }]
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
-        for file in os.listdir():
-            if file.endswith((".mp3", ".m4a", ".webm")):
-                await message.reply_audio(file)
-                os.remove(file)
-                return
+        file = f"{file_id}.mp3"
+        if os.path.exists(file):
+            await message.reply_audio(file)
+            os.remove(file)
 
     except Exception as e:
         await message.reply(f"❌ Error: {e}")
@@ -71,21 +76,23 @@ async def mp4(client, message):
     url = message.command[1]
     await message.reply("⏳ Descargando video...")
 
+    file_id = str(uuid.uuid4())
+
     try:
         ydl_opts = {
-            'format': 'best',
-            'outtmpl': 'video.%(ext)s',
-            'quiet': True
+            'format': 'bestvideo+bestaudio/best',
+            'outtmpl': f'{file_id}.%(ext)s',
+            'quiet': True,
+            'merge_output_format': 'mp4'
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
-        for file in os.listdir():
-            if file.endswith((".mp4", ".mkv", ".webm")):
-                await message.reply_video(file)
-                os.remove(file)
-                return
+        file = f"{file_id}.mp4"
+        if os.path.exists(file):
+            await message.reply_video(file)
+            os.remove(file)
 
     except Exception as e:
         await message.reply(f"❌ Error: {e}")
@@ -94,8 +101,8 @@ async def mp4(client, message):
 if __name__ == "__main__":
     print("🔥 Bot encendido...")
 
-    # 🔥 inicia web en segundo plano
-    threading.Thread(target=run_web).start()
+    # 🌐 servidor web en segundo plano
+    threading.Thread(target=run_web, daemon=True).start()
 
-    # 🤖 inicia bot
+    # 🤖 bot
     app.run()
