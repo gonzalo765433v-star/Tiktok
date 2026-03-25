@@ -73,13 +73,8 @@ async def mp3(client, message):
 
 def descargar_mp3(url):
     ydl_opts = {
-        'format': 'bestaudio/best',
-        'outtmpl': 'audio.%(ext)s',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
+        'format': 'bestaudio',
+        'outtmpl': 'audio.%(ext)s'
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
