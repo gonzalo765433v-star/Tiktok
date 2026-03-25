@@ -1,0 +1,6 @@
+__pycache__/
+*.session
+.cache/
+.config/
+.ssh/
+.bash_history
