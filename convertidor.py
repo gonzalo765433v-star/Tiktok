@@ -7,9 +7,9 @@ import threading
 import uuid
 
 # 🔑 CONFIG
-API_ID = 27459131
-API_HASH = "836a42a092e122d47e1957423f613ec8"
-BOT_TOKEN = "8573490792:AAFlUC7zd0x3XuI91QQ4Rv1F2N1iVKf0wJc"
+API_ID = 
+API_HASH = ""
+BOT_TOKEN = ""
 
 app = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
